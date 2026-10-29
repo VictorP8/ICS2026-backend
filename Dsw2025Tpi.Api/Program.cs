@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Dsw2025Tpi.Api.Extensions;
 
 namespace Dsw2025Tpi.Api;
 
@@ -75,11 +76,15 @@ public class Program
 
         builder.Services.AddHealthChecks();
 
-        builder.Services.AddDbContext<AuthenticateContext>(options =>
-        {
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Dsw2025TpiEntities"));
-        });
+        // Llama al método de extensión y le pasa la configuración y el entorno
+        builder.Services.AddDynamicDatabaseConfiguration(builder.Configuration, builder.Environment);
 
+        /*
+                builder.Services.AddDbContext<AuthenticateContext>(options =>
+                {
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("Dsw2025TpiEntities"));
+                });
+        */
         // --- AQU� EST� EL CAMBIO ---
         builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
         {
@@ -118,11 +123,11 @@ public class Program
                 };
             });
 
-
+        /*
         builder.Services.AddDbContext<Dsw2025TpiContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("Dsw2025TpiEntities"));
-        });
+        });*/
 
         builder.Services.AddSingleton<JwtTokenService>();
         builder.Services.AddAuthorization();
@@ -235,17 +240,17 @@ public class Program
             }
         }
         // Configure the HTTP request pipeline.
-        
+        /*
             app.UseSwagger();
             app.UseSwaggerUI();
         
-/*
+*/
          if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-*/
+
 
         app.UseHttpsRedirection();
         app.UseCors("AllowFrontend");
